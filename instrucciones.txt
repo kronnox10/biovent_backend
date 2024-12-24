@@ -1,0 +1,53 @@
+Myvenv
+
+
+---->Para Ver la api
+http://127.0.0.1:8000/docs
+
+-->Para ver la pagina:
+http://26.135.80.104:5173/
+
+
+---->Para el uso de la api, necesitaremos hacer:
+1.- pip install virtualenv
+
+----creacion de entorno virtual----
+2.- python -m venv myvenv
+
+
+
+ 3.- --> acceder al entorno
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+cd myvenv 
+cd .\Scripts\ 
+.\activate
+cd..
+cd..
+cd app
+fastapi dev main.py
+
+
+
+------------------------------------------------------------------------------------------
+
+Para importar svelte
+1.npx sv create my-app​    
+2.SvelteKit minimal (barebones scaffolding for your new app)
+3.No
+4.None(dar enter)
+5.npm
+
+--> librerias(dentro del cd app antes de correr el  fastapi dev main.py)
+    pip install mysql-connector-python
+    pip install "fastapi[standard]"
+    
+
+Para cargar el svelte: 
+cd my-app
+ npm run dev -- --open
+
+
+pip install fastapi
+pip install pandas
+pip install openpyxl
+pip install python-multipart
