@@ -47,7 +47,7 @@ cd my-app
  npm run dev -- --open
 
 
-pip install fastapi
+pip install "fastapi[standard]"
 pip install pandas
 pip install openpyxl
 pip install python-multipart
