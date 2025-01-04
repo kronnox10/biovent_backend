@@ -15,10 +15,12 @@ class Machinecontroller:
             cursor.execute("SELECT * FROM maquinas WHERE nombre= %s || serial=%s", (machine.nombre,machine.serial,))
             result = cursor.fetchall()
 
-            if result:
+            if result:#ok
                 return {"resultado": "Maquina existente"}
             else: 
-                cursor.execute("INSERT INTO maquinas (nombre,serial,modelo,marca,inventario,ubicacion) VALUES(%s,%s,%s,%s,%s,%s)",  (machine.nombre,machine.serial,machine.modelo,machine.marca,machine.inventario,machine.ubicacion,))
+                cursor.execute("""INSERT INTO maquinas (id_usuario, nombre,marca, modelo,serie,inventario,ubicacion, estado, desc_estado)
+                                VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                               """,  (machine.id_user, machine.nombre, machine.marca, machine.modelo, machine.serial ,machine.inventario ,machine.ubicacion, machine.estado, machine.descripcion_e,))
                 conn.commit()
                 conn.close()
                 return {"resultado": "Maquina registrada"}
@@ -47,8 +49,8 @@ class Machinecontroller:
 
             for index, row in df.iterrows():
                 cursor.execute(
-                    "INSERT INTO maquinas (nombre,serial,modelo,marca,inventario,ubicacion) VALUES (%s,%s,%s,%s,%s,%s)",
-                    (row['nombre'], row['serial'], row['modelo'], row['marca'], row['inventario'], row['ubicacion'])
+                    "INSERT INTO maquinas (id_usuario, nombre,marca, modelo,serie,inventario,ubicacion, estado, desc_estado)  VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)" ,
+                    (row['id_usuario'], row['nombre'], row['marca'], row['modelo'], row['serie'], row['inventario'], row['ubicacion'], row['estado'], row['desc_estado'])
                 )
             conn.commit()  # Hacer commit después de todas las inserciones
             return {"resultado": "Maquinas añadidas exitosamente"}
@@ -65,6 +67,78 @@ class Machinecontroller:
                 conn.close()
 
 
+    def get_machines(self):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM maquinas")
+            result = cursor.fetchall()
+            payload = []
+            content = {} 
+            if result:
+                content={}
+                payload=[]
+                for rv in result:
+                    content={
+                        "id":rv[0],
+                        "id_usuario":rv[1],
+                        "nombre":rv[2],
+                        "marca":rv[3],
+                        "modelo":rv[4],
+                        "serial":rv[5],
+                        "inventario":rv[6],
+                        "ubicacion":rv[7],
+                        "estado":rv[8],
+                        "desc_estado":rv[9]
+                    }
+            payload.append(content)
+            content = {}#
+            json_data = jsonable_encoder(payload)        
+            if result:
+               return {"resultado": json_data}
+            else:
+                raise HTTPException(status_code=404, detail="maquina not found")  
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+
+
+    def get_machine(self, machine_id: Machine):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM maquinas WHERE id_usuario=%s", (machine_id.id,))
+            result = cursor.fetchall()
+            payload = []
+            content = {} 
+            if result:
+                content={}
+                payload=[]
+                for rv in result:
+                    content={
+                        "id":rv[0],
+                        "id_usuario":rv[1],
+                        "nombre":rv[2],
+                        "marca":rv[3],
+                        "modelo":rv[4],
+                        "serial":rv[5],
+                        "inventario":rv[6],
+                        "ubicacion":rv[7],
+                        "estado":rv[8],
+                        "desc_estado":rv[9]
+                    }
+            payload.append(content)
+            content = {}#
+            json_data = jsonable_encoder(payload)        
+            if result:
+               return {"resultado": json_data}
+            else:
+                raise HTTPException(status_code=404, detail="maquina not found")  
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
 
 """
 

@@ -6,13 +6,13 @@ from app.routes.maquina_routes import router as machine_router
 app = FastAPI()
 
 origins = [
-
-    "http://localhost",
-     "http://localhost:5173",  # Permitir desde tu dominio local
-    "http://26.135.80.104:5173"
+    "http://127.0.0.1:5173",  # Tu frontend local
+    "http://26.135.80.104:5173",  # Tu dirección pública
+    "http://localhost:5173",  # Permitir desde tu dominio local
+    "http://26.135.80.104:5173",
 
 ]
-
+ #ya. que era?
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,

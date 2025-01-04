@@ -16,3 +16,13 @@ async def create_machine(machine: Machine):
 async def cargue_masivo(file: UploadFile = File(...)):
     rpta = nueva_maquina.cargue_masivo(file)  # Esto está bien
     return rpta
+
+@router.get("/get_machines")
+async def get_machines():
+    rpta = nueva_maquina.get_machines()
+    return rpta
+
+@router.post("/get_machine")
+async def get_machine(machine_id: Machine):
+    rpta = nueva_maquina.get_machine(machine_id)
+    return rpta

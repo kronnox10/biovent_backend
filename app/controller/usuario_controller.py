@@ -1,7 +1,7 @@
 import mysql.connector
 from fastapi import HTTPException, UploadFile
 from app.config.db_config import get_db_connection
-from app.models.usuario_model import User, Login
+from app.models.usuario_model import User, Login, User_id 
 from fastapi.encoders import jsonable_encoder
 
 class UserController:
@@ -37,17 +37,18 @@ class UserController:
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM usuario WHERE Correo = %s AND Contraseña = %s",(user.correo, user.password,))
+            cursor.execute("SELECT * FROM usuario WHERE correo = %s AND contraseña = %s",(user.correo, user.password,))
             result = cursor.fetchall()
             payload = []
             content = {} 
             for data in result:
                 content={
-                    'correo':data[2],
-                    'password':data[3],
-                    'nombre':data[4],
+                    'cliente':data[2],
+                    'correo':data[3],
+                    'contraseña':data[4],
                     'id':data[0],
                     'id_rol':data[1],
+                    'persona_acargo':data[5],
 
 
                 }
@@ -99,6 +100,43 @@ class UserController:
             conn.rollback()
         finally:
             conn.close()
+
+
+    def post_client(self, user: User_id):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM usuario WHERE id=%s",(user.id,))
+            result = cursor.fetchall()
+            payload = []
+            content = {} 
+            if result:
+                content={}
+                payload=[]
+                for rv in result:
+                    content={
+                        "id":rv[0],
+                        "cliente":rv[2],
+                        "correo":rv[3],
+                        "contraseña":rv[4],
+                        "persona_acargo":rv[5],
+                        "telefono":rv[6],
+                        "ciudad":rv[7],
+                        "direccion":rv[8],
+                        "nic":rv[9],
+                        "estado":rv[10]
+                    }
+            payload.append(content)
+            content = {}#
+            json_data = jsonable_encoder(payload)        
+            if result:
+               return {"resultado": json_data}
+            else:
+                raise HTTPException(status_code=404, detail="User not found")  
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()        
 
 
     def update_client(self, user: User):
