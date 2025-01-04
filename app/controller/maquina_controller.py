@@ -1,7 +1,7 @@
 import mysql.connector
 from fastapi import HTTPException, UploadFile
 from app.config.db_config import get_db_connection
-from app.models.maquina_model import Machine
+from app.models.maquina_model import Machine, Find_machine
 from fastapi.encoders import jsonable_encoder
 from typing import List
 import pandas as pd
@@ -18,7 +18,7 @@ class Machinecontroller:
             if result:#ok
                 return {"resultado": "Maquina existente"}
             else: 
-                cursor.execute("""INSERT INTO maquinas (id_usuario, nombre,marca, modelo,serie,inventario,ubicacion, estado, desc_estado)
+                cursor.execute("""INSERT INTO maquinas (id_usuario, nombre, marca, modelo, serial, inventario, ubicacion, estado, desc  _estado)
                                 VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)
                                """,  (machine.id_user, machine.nombre, machine.marca, machine.modelo, machine.serial ,machine.inventario ,machine.ubicacion, machine.estado, machine.descripcion_e,))
                 conn.commit()
@@ -91,7 +91,7 @@ class Machinecontroller:
                         "estado":rv[8],
                         "desc_estado":rv[9]
                     }
-            payload.append(content)
+                    payload.append(content)
             content = {}#
             json_data = jsonable_encoder(payload)        
             if result:
@@ -104,11 +104,11 @@ class Machinecontroller:
             conn.close()
 
 
-    def get_machine(self, machine_id: Machine):
+    def get_machine(self, machine_id: Find_machine):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM maquinas WHERE id_usuario=%s", (machine_id.id,))
+            cursor.execute("SELECT * FROM maquinas WHERE id_usuario=%s", (machine_id.id_usuario,))
             result = cursor.fetchall()
             payload = []
             content = {} 
@@ -128,7 +128,7 @@ class Machinecontroller:
                         "estado":rv[8],
                         "desc_estado":rv[9]
                     }
-            payload.append(content)
+                    payload.append(content)
             content = {}#
             json_data = jsonable_encoder(payload)        
             if result:

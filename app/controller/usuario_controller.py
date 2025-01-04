@@ -89,7 +89,7 @@ class UserController:
                         "nic":rv[9],
                         "estado":rv[10]
                     }
-            payload.append(content)
+                    payload.append(content)
             content = {}#
             json_data = jsonable_encoder(payload)        
             if result:

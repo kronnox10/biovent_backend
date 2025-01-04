@@ -9,5 +9,8 @@ class Machine(BaseModel):
     serial: str 
     inventario: str=None
     ubicacion: str 
-    estado: str 
+    estado: bool 
     descripcion_e: str=None 
+
+class Find_machine(BaseModel):
+    id_usuario: int

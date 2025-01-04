@@ -23,6 +23,6 @@ async def get_machines():
     return rpta
 
 @router.post("/get_machine")
-async def get_machine(machine_id: Machine):
+async def get_machine(machine_id: Find_machine):
     rpta = nueva_maquina.get_machine(machine_id)
     return rpta
