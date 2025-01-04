@@ -23,7 +23,7 @@ async def login(user: Login):
 async def get_clients():
     rpta = nuevo_usuario.get_clients()
     return rpta
-#
+#s
 
 @router.put()
 async def update_client(user: User):
