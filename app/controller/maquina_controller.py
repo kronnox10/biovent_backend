@@ -1,7 +1,7 @@
 import mysql.connector
 from fastapi import HTTPException, UploadFile
 from app.config.db_config import get_db_connection
-from app.models.maquina_model import Machine, Find_machine
+from app.models.maquina_model import Machine, Find_machine, Machinima
 from fastapi.encoders import jsonable_encoder
 from typing import List
 import pandas as pd
@@ -67,11 +67,11 @@ class Machinecontroller:
                 conn.close()
 
 
-    def get_machines(self):
+    def get_machines(self, machine_id: Machinima):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM maquinas")
+            cursor.execute("SELECT * FROM maquinas WHERE id=%s",(machine_id.id,))
             result = cursor.fetchall()
             payload = []
             content = {} 

@@ -17,9 +17,9 @@ async def cargue_masivo(file: UploadFile = File(...)):
     rpta = nueva_maquina.cargue_masivo(file)  # Esto está bien
     return rpta
 
-@router.get("/get_machines")
-async def get_machines():
-    rpta = nueva_maquina.get_machines()
+@router.post("/get_machines")
+async def get_machines(machine_id: Machinima):
+    rpta = nueva_maquina.get_machines(machine_id)
     return rpta
 
 @router.post("/get_machine")

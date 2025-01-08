@@ -14,3 +14,6 @@ class Machine(BaseModel):
 
 class Find_machine(BaseModel):
     id_usuario: int
+
+class Machinima(BaseModel):
+    id:int

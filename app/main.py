@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes.usuario_routes import router as user_router
 from app.routes.maquina_routes import router as machine_router
+from app.routes.os_routes import router as Os_router
 
 app = FastAPI()
 
@@ -12,7 +13,7 @@ origins = [
     "http://26.135.80.104:5173",
 
 ]
- #ya. que era?
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -23,6 +24,7 @@ app.add_middleware(
 
 app.include_router(user_router) 
 app.include_router(machine_router) 
+app.include_router(Os_router) 
 
 """
 
