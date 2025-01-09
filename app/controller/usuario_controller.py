@@ -102,6 +102,33 @@ class UserController:
             conn.close()
 
 
+    def get_tecnicos(self):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT persona_acargo,estado FROM usuario where id_rol=3")
+            result = cursor.fetchall()
+            payload = []
+            content = {} 
+            for data in result:
+                content={
+                    'Nombre':data[0],
+                    'estado':data[1]
+                }
+                payload.append(content)
+                content = {}
+            json_data = jsonable_encoder(payload)        
+            if result:
+               return {"resultado": json_data}
+            else:
+                raise HTTPException(status_code=404, detail="User not found")  
+                
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+
+
     def post_client(self, user: User_id):
         try:
             conn = get_db_connection()

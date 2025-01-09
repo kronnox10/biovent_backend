@@ -30,6 +30,11 @@ async def post_client(user: User_id):
     rpta = nuevo_usuario.post_client(user)
     return rpta
 
+@router.get("/get_tecnicos")
+async def get_tecnicos():
+    rpta = nuevo_usuario.get_tecnicos()
+    return rpta
+
 @router.put("/update_client")
 async def update_client(user: User):
     rpta= nuevo_usuario.update_client(user)
