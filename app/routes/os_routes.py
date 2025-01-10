@@ -16,3 +16,8 @@ async def get_osi(os_id: Find_Os):
 async def get_os(os_id: Find_Os):
     rpta = nueva_os.get_os(os_id)
     return rpta
+
+@router.put("/asignar_tecnico_os")
+async def asignar_tecnico_os(os:OST):
+    rpta= nueva_os.asignar_tecnico_os(os)
+    return rpta

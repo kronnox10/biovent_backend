@@ -1,7 +1,7 @@
 import mysql.connector
 from fastapi import HTTPException, UploadFile
 from app.config.db_config import get_db_connection
-from app.models.usuario_model import User, Login, User_id, Actualizar
+from app.models.usuario_model import *
 from fastapi.encoders import jsonable_encoder
 
 class UserController:

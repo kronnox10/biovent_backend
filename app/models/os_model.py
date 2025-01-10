@@ -6,11 +6,15 @@ class OS (BaseModel):
     id_propietario: int
     id_maquina:int
     descripcion: str
-    id_tecnico: int=None
+    tecnico: str=None
     fecha_solicitud: str
     estado: bool
 
 
 class Find_Os(BaseModel):
     id_usuario: int
+
+class OST(BaseModel):
+    id:int=None
+    id_tecnico:int=None
 
