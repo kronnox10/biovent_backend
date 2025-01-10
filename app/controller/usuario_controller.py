@@ -1,7 +1,7 @@
 import mysql.connector
 from fastapi import HTTPException, UploadFile
 from app.config.db_config import get_db_connection
-from app.models.usuario_model import User, Login, User_id 
+from app.models.usuario_model import User, Login, User_id, Actualizar
 from fastapi.encoders import jsonable_encoder
 
 class UserController:
@@ -106,14 +106,15 @@ class UserController:
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT persona_acargo,estado FROM usuario where id_rol=3")
+            cursor.execute("SELECT id,persona_acargo,estado FROM usuario where id_rol=3")
             result = cursor.fetchall()
             payload = []
             content = {} 
             for data in result:
                 content={
-                    'Nombre':data[0],
-                    'estado':data[1]
+                    'id':data[0],
+                    'Nombre':data[1],
+                    'estado':data[2]
                 }
                 payload.append(content)
                 content = {}
@@ -166,27 +167,28 @@ class UserController:
             conn.close()        
 
 
-    def update_client(self, user: User):
+    def update_client(self, user: Actualizar):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("""UPDATE usuario
-                            set 
-                            cliente=%s,
-                            correo=%s,
-                            contraseña=%s,
-                            persona_acargo=%s,
-                            telefono=%s,
-                            ciudad=%s,
-                            direccion=%s,
-                            nic=%s,
-                            estado=%s
-                           
-                            WHERE id=%s
-                           """,(user.cliente, user.correo, user.password, user.jefe_de_uso, user.telefono, user.ciudad, user.direccion, user.nic, user.estado,))
+                set 
+                cliente=%s,
+                correo=%s,
+                contraseña=%s,
+                persona_acargo=%s,
+                telefono=%s,
+                ciudad=%s,
+                direccion=%s,
+                nic=%s,
+                estado=%s
+                WHERE id=%s
+                """,(user.cliente, user.correo, user.password, user.jefe_de_uso, user.telefono, user.ciudad, user.direccion, user.nic, user.estado, user.id))
             conn.commit()
   
+            return {"resultado": "Usuario actualizado correctamente"} 
+                
         except mysql.connector.Error as err:
             conn.rollback()
         finally:
-            conn.close()
+            conn.close()    

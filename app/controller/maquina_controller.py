@@ -1,7 +1,7 @@
 import mysql.connector
 from fastapi import HTTPException, UploadFile
 from app.config.db_config import get_db_connection
-from app.models.maquina_model import Machine, Find_machine, Machinima
+from app.models.maquina_model import *
 from fastapi.encoders import jsonable_encoder
 from typing import List
 import pandas as pd
@@ -139,6 +139,31 @@ class Machinecontroller:
             conn.rollback()
         finally:
             conn.close()
+
+
+    def update_maquina(self, machine: UpdateMachine):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("""UPDATE maquinas
+                set 
+                nombre=%s,
+                marca=%s,
+                modelo=%s,
+                serial=%s,
+                inventario=%s,
+                ubicacion=%s,
+                estado=%s,
+                desc_estado=%s
+                WHERE id=%s""",(machine.nombre, machine.marca, machine.modelo, machine.serial ,machine.inventario ,machine.ubicacion, machine.estado, machine.descripcion_e, machine.id,))
+            conn.commit()
+  
+            return {"resultado": "Maquina actualizada correctamente"} 
+                
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()    
 
 """
 

@@ -17,3 +17,14 @@ class Find_machine(BaseModel):
 
 class Machinima(BaseModel):
     id:int
+
+class UpdateMachine(BaseModel):
+    id: int= None
+    nombre: str
+    marca: str 
+    modelo: str 
+    serial: str 
+    inventario: str=None
+    ubicacion: str 
+    estado: bool 
+    descripcion_e: str=None 

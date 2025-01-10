@@ -26,3 +26,8 @@ async def get_machines(machine_id: Machinima):
 async def get_machine(machine_id: Find_machine):
     rpta = nueva_maquina.get_machine(machine_id)
     return rpta
+
+@router.put("/update_maquina")
+async def update_maquina(machine: UpdateMachine):
+    rpta= nueva_maquina.update_maquina(machine)
+    return rpta

@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from app.controller.usuario_controller import *
-from app.models.usuario_model import User, Login, User_id
+from app.models.usuario_model import *
 
 
 router = APIRouter()
@@ -36,6 +36,6 @@ async def get_tecnicos():
     return rpta
 
 @router.put("/update_client")
-async def update_client(user: User):
+async def update_client(user: Actualizar):
     rpta= nuevo_usuario.update_client(user)
     return rpta
