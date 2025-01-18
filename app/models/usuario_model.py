@@ -11,7 +11,7 @@ class User(BaseModel):
     ciudad: str = None
     direccion: str = None
     nic: str = None
-    estado: bool 
+    estado: bool
 
 class Login(BaseModel):     
     correo: str
@@ -31,3 +31,4 @@ class Actualizar(BaseModel):
     direccion: str = None
     nic: str = None
     estado: bool 
+

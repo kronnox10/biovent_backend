@@ -5,7 +5,6 @@ from app.models.usuario_model import *
 from fastapi.encoders import jsonable_encoder
 
 class UserController:
-    
     def create_client(self, user: User):   
         try:
             conn = get_db_connection()
@@ -21,11 +20,10 @@ class UserController:
             else:   
                 cursor.execute("""INSERT INTO usuario (id_rol, cliente, correo, contraseña, persona_acargo, telefono, ciudad, direccion, nic, estado) 
                                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                               """, (user.id_rol,user.cliente, user.correo,user.password,user.jefe_de_uso, user.telefono, user.ciudad, user.direccion, user.nic, user.estado,))
+                               """, (user.id_rol, user.cliente, user.correo, user.password, user.jefe_de_uso, user.telefono, user.ciudad, user.direccion, user.nic, user.estado,))
                 conn.commit()
                 conn.close()
-                id=cursor.lastrowid
-                return {id}#
+                return {"resultado": "Usuario registrado"}
 
         except mysql.connector.Error as err:
             conn.rollback()
@@ -69,7 +67,7 @@ class UserController:
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM usuario")
+            cursor.execute("SELECT * FROM usuario where id_rol=2")
             result = cursor.fetchall()
             payload = []
             content = {} 
@@ -183,7 +181,7 @@ class UserController:
                 nic=%s,
                 estado=%s
                 WHERE id=%s
-                """,(user.cliente, user.correo, user.password, user.jefe_de_uso, user.telefono, user.ciudad, user.direccion, user.nic, user.estado, user.id))
+                """,(user.cliente, user.correo, user.password, user.jefe_de_uso, user.telefono, user.ciudad, user.direccion, user.nic, user.estado, user.id,))
             conn.commit()
   
             return {"resultado": "Usuario actualizado correctamente"} 
@@ -192,3 +190,101 @@ class UserController:
             conn.rollback()
         finally:
             conn.close()    
+
+
+    def get_technicals(self):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM usuario where id_rol=3")
+            result = cursor.fetchall()
+            payload = []
+            content = {} 
+            if result:
+                content={}
+                payload=[]
+                for rv in result:
+                    content={
+                        "id":rv[0],
+                        "cliente":rv[2],
+                        "correo":rv[3],
+                        "contraseña":rv[4],
+                        "persona_acargo":rv[5],
+                        "telefono":rv[6],
+                        "ciudad":rv[7],
+                        "direccion":rv[8],
+                        "nic":rv[9],
+                        "estado":rv[10]
+                    }
+                    payload.append(content)
+            content = {}#
+            json_data = jsonable_encoder(payload)        
+            if result:
+               return {"resultado": json_data}
+            else:
+                raise HTTPException(status_code=404, detail="User not found")  
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+
+    def get_technical(self, tecnico: User_id):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM usuario where id=%s",(tecnico.id,))
+            result = cursor.fetchall()
+            payload = []
+            content = {} 
+            if result:
+                content={}
+                payload=[]
+                for rv in result:
+                    content={
+                        "id":rv[0],
+                        "cliente":rv[2],
+                        "correo":rv[3],
+                        "contraseña":rv[4],
+                        "persona_acargo":rv[5],
+                        "telefono":rv[6],
+                        "ciudad":rv[7],
+                        "direccion":rv[8],
+                        "nic":rv[9],
+                        "estado":rv[10]
+                    }
+                    payload.append(content)
+            content = {}#
+            json_data = jsonable_encoder(payload)        
+            if result:
+               return {"resultado": json_data}
+            else:
+                raise HTTPException(status_code=404, detail="User not found")  
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+
+    def create_technical(self, user: User):   
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM usuario WHERE correo= %s  || persona_acargo=%s", (user.correo, user.jefe_de_uso,))
+            result = cursor.fetchall()
+
+            if result:
+                content = {}    
+                content={"Informacion":"Usuario existente"}
+            
+                return jsonable_encoder(content)
+            else:   
+                cursor.execute("""INSERT INTO usuario (id_rol, cliente, correo, contraseña, persona_acargo, telefono, ciudad, direccion, nic, estado) 
+                            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                            """, (user.id_rol, user.cliente, user.correo, user.password, user.jefe_de_uso, user.telefono, user.ciudad, user.direccion, user.nic, user.estado,))
+                conn.commit()
+                conn.close()
+                return {"resultado": "Usuario registrado"}
+
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
