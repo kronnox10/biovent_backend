@@ -2,15 +2,16 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes.usuario_routes import router as user_router
 from app.routes.maquina_routes import router as machine_router
+from app.routes.os_routes import router as Os_router
 
 app = FastAPI()
 
 origins = [
-
     "http://localhost",
-     "http://localhost:5173",  # Permitir desde tu dominio local
-    "http://26.135.80.104:5173"
-
+    "http://localhost:5173",  # Permitir desde tu dominio local
+    "http://26.135.80.104:5173",
+    "https://biovent.lat",
+    "https://biovent-frontend.onrender.com",
 ]
 
 app.add_middleware(
