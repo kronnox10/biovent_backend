@@ -1,13 +1,12 @@
 from pydantic import BaseModel
-
+from typing import Optional
 
 class OS (BaseModel):
     id:int=None
     id_propietario: int
     id_maquina:int
     descripcion: str
-    tecnico: str=None
-    fecha_solicitud: str
+    tecnico: Optional[int] = None
     estado: bool
 
 
@@ -16,5 +15,5 @@ class Find_Os(BaseModel):
 
 class OST(BaseModel):
     id:int=None
-    id_tecnico:int=None
+    id_tecnico: str = None
 

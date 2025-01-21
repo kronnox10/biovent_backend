@@ -21,9 +21,9 @@ class os_controller:
               
                 return jsonable_encoder(content)
             else:   
-                cursor.execute("""INSERT INTO orden_servicio (id_propietario, id_maquina, descripcion, id_tecnico, fecha_solicitud, estado) 
-                               VALUES (%s,%s,%s,%s,%s,%s,)
-                               """, (os.id_propietario, os.id_maquina, os.descripcion, os.tecnico, os.fecha_solicitud, os.estado,))
+                cursor.execute("""INSERT INTO orden_servicio (id_propietario, id_maquina, descripcion, id_tecnico, estado) 
+                               VALUES (%s,%s,%s,%s,%s)
+                               """, (os.id_propietario, os.id_maquina, os.descripcion, os.tecnico, os.estado,))
                 conn.commit()
                 conn.close()
                 return {"resultado": "Orden de servicio registrada"}
@@ -115,7 +115,7 @@ class os_controller:
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("""SELECT orden_servicio.id, propietario.cliente AS propietario_cliente, maquinas.nombre AS nombre_maquina,
+            cursor.execute("""SELECT orden_servicio.id, propietario.cliente AS propietario_cliente, maquinas.equipo AS nombre_maquina,
                             orden_servicio.descripcion, tecnico.persona_acargo AS tecnico_nombre, orden_servicio.estado
                         FROM orden_servicio
                     INNER JOIN usuario AS propietario ON orden_servicio.id_propietario = propietario.id
@@ -149,6 +149,46 @@ class os_controller:
             conn.rollback()
         finally:
             conn.close()
+
+    
+    def get_historial_os(self):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("""SELECT orden_servicio.id, propietario.cliente AS propietario_cliente, maquinas.equipo AS nombre_maquina,
+                            orden_servicio.descripcion, tecnico.persona_acargo AS tecnico_nombre, orden_servicio.estado
+                        FROM orden_servicio
+                    INNER JOIN usuario AS propietario ON orden_servicio.id_propietario = propietario.id
+                    INNER JOIN maquinas ON orden_servicio.id_maquina = maquinas.id
+                    LEFT JOIN usuario AS tecnico ON orden_servicio.id_tecnico = tecnico.id""")
+            result = cursor.fetchall()
+            payload = []
+            content = {} 
+            if result:
+                
+                content={}
+                payload=[]
+                for rv in result:
+                    content={
+                        "id":rv[0],
+                        "usuario_cliente":rv[1],
+                        "nombre_maquina":rv[2],
+                        "descripcion":rv[3],
+                        "tecnico":rv[4],
+                        "estado":rv[5],
+                    }
+                    payload.append(content)
+            content = {}#
+            json_data = jsonable_encoder(payload)        
+            if result:
+               return {"resultado": json_data}
+            else:
+                raise HTTPException(status_code=404, detail="maquina not found")  
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+
 
     def asignar_tecnico_os(self, os:OST):
         try:

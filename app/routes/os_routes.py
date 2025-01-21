@@ -7,6 +7,11 @@ router = APIRouter()
 
 nueva_os = os_controller()
 
+@router.post("/create_os")
+async def create_os(os:OS):
+    rpta = nueva_os.create_os(os)
+    return rpta
+
 @router.post("/get_osi")
 async def get_osi(os_id: Find_Os):
     rpta = nueva_os.get_osi(os_id)
@@ -15,6 +20,11 @@ async def get_osi(os_id: Find_Os):
 @router.get("/get_os_activas")
 async def get_os_activas():
     rpta = nueva_os.get_os_activas()
+    return rpta
+
+@router.get("/get_historial_os")
+async def get_historial_os():
+    rpta = nueva_os.get_historial_os()
     return rpta
 
 @router.post("/get_os")
