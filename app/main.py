@@ -9,15 +9,21 @@ app = FastAPI()
 origins = [
     "http://127.0.0.1:5173",  #
     "http://26.135.80.104:5173",  #
-    "https://biovent.lat/","https://biovent-frontend.onrender.com/",
+    "https://biovent.lat",
+    "https://biovent-frontend.onrender.com",
     "http://localhost:5173",  #
-    "https://biovent-backend.onrender.com","https://4483-2800-484-1789-2d00-a5c1-1230-199c-33b3.ngrok-free.app"
+    "https://biovent-backend.onrender.com",
+    "https://4483-2800-484-1789-2d00-a5c1-1230-199c-33b3.ngrok-free.app"
 
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=[
+        "https://biovent.lat",
+        "http://localhost:5173",
+        "https://biovent-frontend.onrender.com",
+    ],
     allow_credentials=True,
     allow_methods=["*"],  # Permite todos los métodos (GET, POST, etc.)
     allow_headers=["*"],  # Permite todos los encabezados
@@ -31,12 +37,12 @@ app.include_router(Os_router)
 
 @app.route('/')
 def home():
-    return ('+page.svelte')"""
+    return ('+page.svelte')
 
-"""
+import os
+import uvicorn
+
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000) """
-
-#...
-#
+    port = int(os.getenv("PORT", 8000))  # Render asigna el puerto en la variable PORT
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
+"""
