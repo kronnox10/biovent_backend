@@ -8,7 +8,7 @@ app = FastAPI()
 
 origins = [
     "http://127.0.0.1:5173",  #
-    "http://26.135.80.104:5173",  #
+    "https://www.biovent.lat/","https://biovent-frontend.onrender.com/"  #
     "http://localhost:5173",  #
     "https://d458-2800-484-1789-2d00-a5c1-1230-199c-33b3.ngrok-free.app","https://4483-2800-484-1789-2d00-a5c1-1230-199c-33b3.ngrok-free.app"
 
