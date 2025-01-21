@@ -7,6 +7,32 @@ from typing import List
 
 
 class os_controller:
+    def create_os(self, os:OS):
+        try:
+            conn = get_db_connection() 
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM orden_servicio WHERE id_propietario=%s AND id_maquina=%s", (os.id_propietario,os.id_maquina,))
+            result = cursor.fetchall()
+
+            if result:
+                content = {}    
+                content={"Informacion":"Ya hay una os generada para este equipo"}
+              
+                return jsonable_encoder(content)
+            else:   
+                cursor.execute("""INSERT INTO usuario (id_rol, cliente, correo, contraseña, persona_acargo, telefono, ciudad, direccion, nic, estado) 
+                               VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                               """, (user.id_rol, user.cliente, user.correo, user.password, user.jefe_de_uso, user.telefono, user.ciudad, user.direccion, user.nic, user.estado,))
+                conn.commit()
+                conn.close()
+                return {"resultado": "Usuario registrado"}
+
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+    
+    
     def get_osi(self, os_id: Find_Os):
         try:
             conn = get_db_connection()
@@ -70,6 +96,46 @@ class os_controller:
                         "descripcion":rv[2],
                         "tecnico":rv[3],
                         "estado":rv[4],
+                    }
+                    payload.append(content)
+            content = {}#
+            json_data = jsonable_encoder(payload)        
+            if result:
+               return {"resultado": json_data}
+            else:
+                raise HTTPException(status_code=404, detail="maquina not found")  
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+
+
+    def get_os_activas(self):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("""SELECT orden_servicio.id, propietario.cliente AS propietario_cliente, maquinas.nombre AS nombre_maquina,
+                            orden_servicio.descripcion, tecnico.persona_acargo AS tecnico_nombre, orden_servicio.estado
+                        FROM orden_servicio
+                    INNER JOIN usuario AS propietario ON orden_servicio.id_propietario = propietario.id
+                    INNER JOIN maquinas ON orden_servicio.id_maquina = maquinas.id
+                    LEFT JOIN usuario AS tecnico ON orden_servicio.id_tecnico = tecnico.id
+                        WHERE orden_servicio.estado = 1;""")
+            result = cursor.fetchall()
+            payload = []
+            content = {} 
+            if result:
+                
+                content={}
+                payload=[]
+                for rv in result:
+                    content={
+                        "id":rv[0],
+                        "usuario_cliente":rv[1],
+                        "nombre_maquina":rv[2],
+                        "descripcion":rv[3],
+                        "tecnico":rv[4],
+                        "estado":rv[5],
                     }
                     payload.append(content)
             content = {}#

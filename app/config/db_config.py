@@ -1,14 +1,13 @@
 import mysql.connector
 
-"""
-
 def get_db_connection():
     return mysql.connector.connect(
-        host="bfrrsop1jsm0voqgbgao-mysql.services.clever-cloud.com",
-        user="uupmlcry92arfxpf",
-        password="4SPvFuFqzZtr7KeWgCxv",
-        database="bfrrsop1jsm0voqgbgao"
+        host="bmek95iuaecirph74akm-mysql.services.clever-cloud.com",
+        user="uh29isq44hisbkut",
+        password="I946d1LnDR0pEHspueVx",
+        database="bmek95iuaecirph74akm"
     )
+
 """
 def get_db_connection():
     return mysql.connector.connect(
@@ -17,4 +16,4 @@ def get_db_connection():
         password="",
         database="biovent"
     )
-    ##importara a xampp
+    ##importara a xampp"""

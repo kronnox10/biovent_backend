@@ -7,10 +7,10 @@ from app.routes.os_routes import router as Os_router
 app = FastAPI()
 
 origins = [
-    "http://127.0.0.1:5173",  # Tu frontend local
-    "http://26.135.80.104:5173",  # Tu dirección pública
-    "http://localhost:5173",  # Permitir desde tu dominio local
-    "https://b475-2800-484-1789-2d00-a5c1-1230-199c-33b3.ngrok-free.app",
+    "http://127.0.0.1:5173",  #
+    "http://26.135.80.104:5173",  #
+    "http://localhost:5173",  #
+    "https://d458-2800-484-1789-2d00-a5c1-1230-199c-33b3.ngrok-free.app","https://4483-2800-484-1789-2d00-a5c1-1230-199c-33b3.ngrok-free.app"
 
 ]
 

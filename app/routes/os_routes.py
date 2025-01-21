@@ -12,6 +12,11 @@ async def get_osi(os_id: Find_Os):
     rpta = nueva_os.get_osi(os_id)
     return rpta
 
+@router.get("/get_os_activas")
+async def get_os_activas():
+    rpta = nueva_os.get_os_activas()
+    return rpta
+
 @router.post("/get_os")
 async def get_os(os_id: Find_Os):
     rpta = nueva_os.get_os(os_id)
