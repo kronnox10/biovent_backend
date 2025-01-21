@@ -6,23 +6,23 @@ from app.routes.os_routes import router as Os_router
 
 app = FastAPI()
 
-origins = [
-    "http://127.0.0.1:5173",  #
-    "http://26.135.80.104:5173",  #
-    "https://biovent.lat",
-    "https://biovent-frontend.onrender.com",
-    "http://localhost:5173",  #
-    "https://biovent-backend.onrender.com",
-    "https://4483-2800-484-1789-2d00-a5c1-1230-199c-33b3.ngrok-free.app"
-
-]
+#origins = [
+ #   "http://127.0.0.1:5173",  #
+  #  "http://26.135.80.104:5173",  #
+   # "http://localhost:5173",  #
+    #"https://biovent-backend.onrender.com",
+    #"https://4483-2800-484-1789-2d00-a5c1-1230-199c-33b3.ngrok-free.app"
+#]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://biovent.lat",
+        "http://127.0.0.1:5173",
         "http://localhost:5173",
+        "https://biovent.lat",
         "https://biovent-frontend.onrender.com",
+        "https://biovent-backend.onrender.com",
+        "https://4483-2800-484-1789-2d00-a5c1-1230-199c-33b3.ngrok-free.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],  # Permite todos los métodos (GET, POST, etc.)
