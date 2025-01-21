@@ -17,13 +17,13 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://biovent.lat",  # Dominio del frontend
+        "biovent.lat",  # Dominio del frontend
         "http://localhost:5173",  # Para el desarrollo local
-        "https://biovent-frontend.onrender.com",
+        "biovent-frontend.onrender.com",
         "www.biovent.lat",# Si usas otro dominio
     ],
     allow_credentials=True,
-    allow_methods=["*"],  # Permite todos los métodos (GET, POST, etc.)
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],  # Asegúrate de que estos métodos están permitidos
     allow_headers=["*"],  # Permite todos los encabezados
 )
 
