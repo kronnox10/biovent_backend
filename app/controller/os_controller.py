@@ -7,6 +7,7 @@ from typing import List
 
 
 class os_controller:
+    
     def create_os(self, os:OS):
         try:
             conn = get_db_connection() 
@@ -20,12 +21,12 @@ class os_controller:
               
                 return jsonable_encoder(content)
             else:   
-                cursor.execute("""INSERT INTO usuario (id_rol, cliente, correo, contraseña, persona_acargo, telefono, ciudad, direccion, nic, estado) 
-                               VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                               """, (user.id_rol, user.cliente, user.correo, user.password, user.jefe_de_uso, user.telefono, user.ciudad, user.direccion, user.nic, user.estado,))
+                cursor.execute("""INSERT INTO orden_servicio (id_propietario, id_maquina, descripcion, id_tecnico, fecha_solicitud, estado) 
+                               VALUES (%s,%s,%s,%s,%s,%s,)
+                               """, (os.id_propietario, os.id_maquina, os.descripcion, os.tecnico, os.fecha_solicitud, os.estado,))
                 conn.commit()
                 conn.close()
-                return {"resultado": "Usuario registrado"}
+                return {"resultado": "Orden de servicio registrada"}
 
         except mysql.connector.Error as err:
             conn.rollback()
