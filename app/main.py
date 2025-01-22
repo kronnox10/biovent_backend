@@ -11,7 +11,7 @@ app = FastAPI()
   #  "http://26.135.80.104:5173",  #
    # "http://localhost:5173",  #
     #"https://biovent-backend.onrender.com",
-    #"https://4483-2800-484-1789-2d00-a5c1-1230-199c-33b3.ngrok-free.app"
+    #"https://151e-2800-484-1789-2d00-a5c1-1230-199c-33b3.ngrok-free.app"
 #]
 
 app.add_middleware(
@@ -20,7 +20,9 @@ app.add_middleware(
         "http://biovent.lat",  # Dominio del frontend
         "http://localhost:5173",  # Para el desarrollo local
         "http://biovent-frontend.onrender.com",
-        "www.biovent.lat",# Si usas otro dominio
+        "www.biovent.lat",
+        "https://151e-2800-484-1789-2d00-a5c1-1230-199c-33b3.ngrok-free.app"
+        # Si usas otro dominio
     ],
     allow_credentials=True,
     allow_methods=["*"],  # Permite todos los métodos (GET, POST, etc.)

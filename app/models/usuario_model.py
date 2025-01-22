@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class User(BaseModel):     
     id: int= None
@@ -7,10 +8,10 @@ class User(BaseModel):
     correo: str
     password: str 
     jefe_de_uso: str 
-    telefono: str = None
-    ciudad: str = None
-    direccion: str = None
-    nic: str = None
+    telefono: Optional[str] = None
+    ciudad: Optional[str] = None
+    direccion: Optional[str] = None
+    nic: Optional[str] = None
     estado: bool
 
 class Login(BaseModel):     
