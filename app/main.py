@@ -21,7 +21,7 @@ app.add_middleware(
         "http://localhost:5173",  # Para el desarrollo local
         "http://biovent-frontend.onrender.com",
         "www.biovent.lat",
-        "http://151e-2800-484-1789-2d00-a5c1-1230-199c-33b3.ngrok-free.app"
+        "http://151e-2800-484-1789-2d00-a5c1-1230-199c-33b3.ngrok-free.app",
         # Si usas otro dominio
     ],
     allow_credentials=True,
