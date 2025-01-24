@@ -193,6 +193,67 @@ class Machinecontroller:
         finally:
             conn.close()    
 
+
+    def get_machine_on(self, machine: machineon):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("""SELECT COUNT(id) as Funcionando
+                            FROM maquinas
+                            WHERE id_usuario = %s AND estado=1;""",(machine.id_usuario,))
+            result = cursor.fetchone() 
+            if result:
+                return {"Funcionando": result[0]}
+            else:
+                raise HTTPException(status_code=404, detail="Máquinas no encontradas") 
+        except mysql.connector.Error as err:
+            print(f"Error de conexión: {err}")
+            raise HTTPException(status_code=500, detail="Error interno del servidor")
+        finally:
+            cursor.close()  # Asegúrate de cerrar el cursor
+            conn.close()
+
+
+    def get_machine_off(self, machine: machineon):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("""SELECT COUNT(id) as Dañados 
+                           FROM maquinas 
+                           WHERE id_usuario =%s AND estado = 0 AND desc_estado=""; """,(machine.id_usuario,))
+            result = cursor.fetchone() 
+            if result:
+                return {"Dañadas": result[0]}
+            else:
+                raise HTTPException(status_code=404, detail="Máquinas no encontradas") 
+        except mysql.connector.Error as err:
+            print(f"Error de conexión: {err}")
+            raise HTTPException(status_code=500, detail="Error interno del servidor")
+        finally:
+            cursor.close()  # Asegúrate de cerrar el cursor
+            conn.close()
+
+
+    def get_machine_off_topic(self, machine: machineon):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("""SELECT COUNT(id) as Dañadas_por_algo 
+                            FROM maquinas
+                            WHERE id_usuario = %s AND estado = 0 AND desc_estado IS NOT NULL AND desc_estado <> '' """,(machine.id_usuario,))
+            result = cursor.fetchone() 
+            if result:
+                return {"Dañadas por algo": result[0]}
+            else:
+                raise HTTPException(status_code=404, detail="Máquinas no encontradas") 
+        except mysql.connector.Error as err:
+            print(f"Error de conexión: {err}")
+            raise HTTPException(status_code=500, detail="Error interno del servidor")
+        finally:
+            cursor.close()  # Asegúrate de cerrar el cursor
+            conn.close()
+
+
 """
 
  def create_user_masivo(self, file: UploadFile):

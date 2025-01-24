@@ -31,3 +31,7 @@ class UpdateMachine(BaseModel):
     sede: str
     estado: bool 
     descripcion_e: Optional[str] = None
+
+class machineon(BaseModel):
+    id_usuario: int
+    estado:bool

@@ -32,3 +32,19 @@ async def get_machine(machine_id: Find_machine):
 async def update_maquina(machine: UpdateMachine):
     rpta= nueva_maquina.update_maquina(machine)
     return rpta
+
+
+@router.post("/get_machine_on")
+async def get_machine_on(machine: machineon):
+    rpta = nueva_maquina.get_machine_on(machine)
+    return rpta
+
+@router.post("/get_machine_off")
+async def get_machine_off(machine: machineon):
+    rpta = nueva_maquina.get_machine_off(machine)
+    return rpta
+
+@router.post("/get_machine_off_topic")
+async def get_machine_off_topic(machine: machineon):
+    rpta = nueva_maquina.get_machine_off_topic(machine)
+    return rpta
