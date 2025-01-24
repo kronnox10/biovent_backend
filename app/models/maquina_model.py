@@ -34,4 +34,3 @@ class UpdateMachine(BaseModel):
 
 class machineon(BaseModel):
     id_usuario: int
-    estado:bool

@@ -200,7 +200,7 @@ class Machinecontroller:
             cursor = conn.cursor()
             cursor.execute("""SELECT COUNT(id) as Funcionando
                             FROM maquinas
-                            WHERE id_usuario = %s AND estado=1;""",(machine.id_usuario,))
+                            WHERE id_usuario = %s AND estado=1""",(machine.id_usuario,))
             result = cursor.fetchone() 
             if result:
                 return {"Funcionando": result[0]}
