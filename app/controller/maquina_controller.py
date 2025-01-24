@@ -243,7 +243,7 @@ class Machinecontroller:
                             WHERE id_usuario = %s AND estado = 0 AND desc_estado IS NOT NULL AND desc_estado <> '' """,(machine.id_usuario,))
             result = cursor.fetchone() 
             if result:
-                return {"Dañadas por algo": result[0]}
+                return {"Dañadasporalgo": result[0]}
             else:
                 raise HTTPException(status_code=404, detail="Máquinas no encontradas") 
         except mysql.connector.Error as err:
