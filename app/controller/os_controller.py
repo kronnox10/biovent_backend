@@ -38,7 +38,7 @@ class os_controller:
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("""SELECT orden_servicio.id, propietario.cliente AS propietario_cliente, maquinas.nombre AS nombre_maquina,
+            cursor.execute("""SELECT orden_servicio.id, propietario.cliente AS propietario_cliente, maquinas.equipo AS nombre_maquina,
                             orden_servicio.descripcion, tecnico.persona_acargo AS tecnico_nombre, orden_servicio.estado
                         FROM orden_servicio
                     INNER JOIN usuario AS propietario ON orden_servicio.id_propietario = propietario.id
@@ -77,7 +77,7 @@ class os_controller:
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("""SELECT usuario.cliente, maquinas.nombre, descripcion, tecnico.persona_acargo, orden_servicio.estado 
+            cursor.execute("""SELECT usuario.cliente, maquinas.equipo, descripcion, tecnico.persona_acargo, orden_servicio.estado 
                            FROM orden_servicio 
                            INNER JOIN usuario ON orden_servicio.id_propietario = usuario.id 
                            INNER JOIN maquinas ON orden_servicio.id_maquina = maquinas.id 
