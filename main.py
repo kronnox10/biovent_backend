@@ -12,7 +12,7 @@ origins = [
     "http://26.135.80.104:5173",
     "https://biovent.lat",
     "https://biovent-frontend.onrender.com",
-    "https://ad2b-2800-484-1789-2d00-a5c1-1230-199c-33b3.ngrok-free.app",
+    "https://4be4-2800-484-1789-2d00-c002-b156-6743-4ce4.ngrok-free.app",
 ]
 
 app.add_middleware(
