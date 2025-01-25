@@ -25,7 +25,7 @@ app.add_middleware(
 
 app.include_router(user_router) 
 app.include_router(machine_router) 
-
+app.include_router(Os_router) 
 """
 
 @app.route('/')
