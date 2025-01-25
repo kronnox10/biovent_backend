@@ -239,7 +239,7 @@ class Machinecontroller:
             cursor = conn.cursor()
             cursor.execute("""SELECT COUNT(id) as Dañados 
                            FROM maquinas 
-                           WHERE id_usuario =%s AND estado = 0 AND desc_estado=""; """,(machine.id_usuario,))
+                           WHERE id_usuario =%s AND estado = 0 AND (desc_estado="" OR desc_estado IS NULL) """,(machine.id_usuario,))
             result = cursor.fetchone() 
             if result:
                 return {"Dañadas": result[0]}
