@@ -194,6 +194,25 @@ class Machinecontroller:
             conn.close()    
 
 
+    def up_est_mac(self, machine: Machinima):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("""UPDATE maquinas
+                set estado=0,
+                WHERE id=%s""",(machine.id,))
+            conn.commit()
+  
+            return {"resultado": "La maquina se apago"} 
+                
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()    
+
+
+
+
     def get_machine_on(self, machine: machineon):
         try:
             conn = get_db_connection()

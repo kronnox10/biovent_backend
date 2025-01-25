@@ -23,6 +23,11 @@ async def get_machines(machine_id: Machinima):
     rpta = nueva_maquina.get_machines(machine_id)
     return rpta
 
+@router.post("/up_est_mac")
+async def up_est_mac(machine_id: Machinima):
+    rpta = nueva_maquina.up_est_mac(machine_id)
+    return rpta
+
 @router.post("/get_machine")
 async def get_machine(machine_id: Find_machine):
     rpta = nueva_maquina.get_machine(machine_id)
