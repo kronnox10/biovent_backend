@@ -199,7 +199,7 @@ class Machinecontroller:
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("""UPDATE maquinas
-                set estado=0,
+                set estado=0
                 WHERE id=%s""",(machine.id,))
             conn.commit()
   
