@@ -212,7 +212,6 @@ class Machinecontroller:
 
 
 
-
     def get_machine_on(self, machine: machineon):
         try:
             conn = get_db_connection()

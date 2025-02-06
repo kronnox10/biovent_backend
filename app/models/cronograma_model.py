@@ -16,3 +16,6 @@ class calendar(BaseModel):
     octubre: bool
     noviembre: bool
     diciembre: bool
+
+class cronouser(BaseModel):
+    id_usuario: int

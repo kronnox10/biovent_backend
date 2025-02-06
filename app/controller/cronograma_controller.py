@@ -23,3 +23,40 @@ class Cronogramacontroller:
                 conn.rollback()
             finally:
                 conn.close()
+
+    def getdaysbyuser(self, crono_user: cronouser):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM cronograma WHERE id_usuario=%s",(crono_user.id_usuario,))
+            result = cursor.fetchall()
+            payload = []
+            content = {} 
+            if result:
+                for rv in result:
+                    content = {
+                        "id_usuario":rv[0],
+                        "equipo":rv[1],
+                        "enero":rv[2],
+                        "febrero":rv[3],
+                        "marzo":rv[4],
+                        "abril":rv[5],
+                        "mayo":rv[6],
+                        "junio":rv[7],
+                        "julio":rv[8],
+                        "agosto":rv[9],
+                        "septiembre":rv[10],
+                        "octubre":rv[11],
+                        "noviembre":rv[12],
+                        "diciembre":rv[13]
+                    }
+                    payload.append(content)
+                json_data = jsonable_encoder(payload)        
+            if payload:
+               return {"resultado": json_data}
+            else:
+                raise HTTPException(status_code=404, detail="Cronograma not found")  
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
