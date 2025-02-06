@@ -22,6 +22,11 @@ async def get_ost(os_id: Find_Os):
     rpta = nueva_os.get_ost(os_id)
     return rpta
 
+@router.post("/get_osh")
+async def get_osh(os_id: Find_Os):
+    rpta = nueva_os.get_osh(os_id)
+    return rpta
+
 @router.get("/get_os_activas")
 async def get_os_activas():
     rpta = nueva_os.get_os_activas()
@@ -40,4 +45,9 @@ async def get_os(os_id: Find_Os):
 @router.put("/asignar_tecnico_os")
 async def asignar_tecnico_os(os:OST):
     rpta= nueva_os.asignar_tecnico_os(os)
+    return rpta
+
+@router.put("/update_os")
+async def update_os(os:OS):
+    rpta= nueva_os.update_os(os)
     return rpta

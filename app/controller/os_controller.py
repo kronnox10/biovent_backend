@@ -33,7 +33,24 @@ class os_controller:
         finally:
             conn.close()
     
-    
+
+    def update_os(self,os:OS):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("""UPDATE orden_servicio
+                set 
+                estado=0
+                WHERE id=%s""",(os.id,))
+            conn.commit()
+  
+            return {"resultado": "Os realizado satisfactoriamente"} 
+                
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()    
+
     def get_osi(self, os_id: Find_Os):
         try:
             conn = get_db_connection()
@@ -85,7 +102,47 @@ class os_controller:
                     INNER JOIN maquinas ON orden_servicio.id_maquina = maquinas.id
                     LEFT JOIN usuario AS tecnico ON orden_servicio.id_tecnico = tecnico.id
                         WHERE orden_servicio.id_tecnico = %s AND orden_servicio.estado = 1;""", (os_id.id_usuario,))
-            result = cursor.fetchall()# si, subelo a renderrrrrrrrrrrrrrrrrrrr zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+            result = cursor.fetchall()# 
+            payload = []
+            content = {} 
+            if result:
+                
+                content={}
+                payload=[]
+                for rv in result:
+                    content={
+                        "id":rv[0],
+                        "usuario_cliente":rv[1],
+                        "nombre_maquina":rv[2],
+                        "descripcion":rv[3],
+                        "tecnico":rv[4],
+                        "estado":rv[5],
+                    }
+                    payload.append(content)
+            content = {}#
+            json_data = jsonable_encoder(payload)        
+            if result:
+               return {"resultado": json_data}
+            else:
+                raise HTTPException(status_code=404, detail="maquina not found")  
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+        
+    
+    def get_osh(self, os_id: Find_Os):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("""SELECT orden_servicio.id, propietario.cliente AS propietario_cliente, maquinas.equipo AS nombre_maquina,
+                            orden_servicio.descripcion, tecnico.persona_acargo AS tecnico_nombre, orden_servicio.estado
+                        FROM orden_servicio
+                    INNER JOIN usuario AS propietario ON orden_servicio.id_propietario = propietario.id
+                    INNER JOIN maquinas ON orden_servicio.id_maquina = maquinas.id
+                    LEFT JOIN usuario AS tecnico ON orden_servicio.id_tecnico = tecnico.id
+                        WHERE orden_servicio.id_tecnico = %s AND orden_servicio.estado = 0;""", (os_id.id_usuario,))
+            result = cursor.fetchall()# 
             payload = []
             content = {} 
             if result:
