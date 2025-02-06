@@ -48,6 +48,6 @@ async def asignar_tecnico_os(os:OST):
     return rpta
 
 @router.put("/update_os")
-async def update_os(os:OS):
+async def update_os(os:OSUpdate):
     rpta= nueva_os.update_os(os)
     return rpta

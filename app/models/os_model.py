@@ -17,3 +17,6 @@ class OST(BaseModel):
     id:int=None
     id_tecnico: str = None
 
+class OSUpdate(BaseModel):
+    id: int
+

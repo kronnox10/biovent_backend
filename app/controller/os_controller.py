@@ -34,7 +34,7 @@ class os_controller:
             conn.close()
     
 
-    def update_os(self,os:OS):
+    def update_os(self,os:OSUpdate):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
