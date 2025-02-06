@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routes.usuario_routes import router as user_router
 from app.routes.maquina_routes import router as machine_router
 from app.routes.os_routes import router as Os_router
+from app.routes.cronograma_routes import router as Crono_router
 
 app = FastAPI()
 
@@ -32,6 +33,7 @@ app.add_middleware(
 app.include_router(user_router) 
 app.include_router(machine_router) 
 app.include_router(Os_router) 
+app.include_router(Crono_router) 
 
 """
 
