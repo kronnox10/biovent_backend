@@ -132,3 +132,19 @@ class Cronogramacontroller:
         finally:
             if conn:
                 conn.close()
+
+
+    def limpiarcronograma(self,crono_user: cronouser):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM cronograma WHERE id_usuario=%s",(crono_user.id_usuario,))
+            conn.commit()
+            return {"resultado": "Cronogramas borrados"}
+        except mysql.connector.Error as err:
+            conn.rollback()
+            return {"resultado": f"Error en la base de datos: {str(err)}"}
+        except Exception as e:
+            return {"resultado": f"Error inesperado: {str(e)}"}
+        finally:
+            conn.close()

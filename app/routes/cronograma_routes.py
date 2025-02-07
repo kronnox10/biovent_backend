@@ -22,3 +22,8 @@ async def getdaysbyuser(crono_user: cronouser):
 async def cargue_masivo_crono(file: UploadFile = File(...),id_usuario: int = Form(...)):
     rpta = nuevo_cronograma.cargue_masivo_crono(file,id_usuario)  # Esto está bien
     return rpta
+
+@router.delete("/limpiarcronograma")
+async def limpiarcronograma(crono_user: cronouser):
+    rpta = nuevo_cronograma.limpiarcronograma(crono_user)  # Esto está bien
+    return rpta
