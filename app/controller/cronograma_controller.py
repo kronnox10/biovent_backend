@@ -62,7 +62,7 @@ class Cronogramacontroller:
             conn.close()
 
 
-    def cargue_masivo(self, file: UploadFile, id_usuario: int):
+    def cargue_masivo_crono(self, file: UploadFile, id_usuario: int):
         conn = None
         try:
         
@@ -98,8 +98,7 @@ class Cronogramacontroller:
                 diciembre = row['DICIEMBRE'] if row['DICIEMBRE'] else "0"
 
                 cursor.execute(
-                    """DELETE 
-                        INSERT INTO cronograma (id_usuario, equipo, enero, febrero, marzo, abril, mayo, junio, julio, agosto, septiembre, octubre, noviembre, diciembre)
+                    """ INSERT INTO cronograma (id_usuario, equipo, enero, febrero, marzo, abril, mayo, junio, julio, agosto, septiembre, octubre, noviembre, diciembre)
                         VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
                     """,
                     (
