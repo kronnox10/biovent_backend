@@ -5,7 +5,7 @@ from app.models.cronograma_model import *
 from fastapi.encoders import jsonable_encoder
 from typing import List
 import pandas as pd
-
+import numpy as np
 
 class Cronogramacontroller:
     def create_day(self, crono: calendar):   
@@ -74,8 +74,9 @@ class Cronogramacontroller:
                 if col not in df.columns:
                     return {"error": f"Falta la columna: {col}"}
 
-            # Reemplazar NaN con None para compatibilidad con la base de datos
-            df = df.where(pd.notnull(df), None)
+            
+            # Convertir los valores de los meses en "1" o "0", sin afectar la columna "EQUIPO"
+            df[required_columns[1:]] = df[required_columns[1:]].applymap(lambda x: "1" if pd.notna(x) and x not in ["", None] else "0")
 
             # Conectar a la base de datos
             conn = get_db_connection()
@@ -84,18 +85,18 @@ class Cronogramacontroller:
             for index, row in df.iterrows():
                 # Manejar valores nulos o vacíos para evitar errores
                 equipo = row['EQUIPO'] if row['EQUIPO'] else "Sin especificar"
-                enero = row['ENERO'] if row['ENERO'] else "0"
-                febrero = row['FEBRERO'] if row['FEBRERO'] else "0"
-                marzo = row['MARZO'] if row['MARZO'] else "0"
-                abril = row['ABRIL'] if row['ABRIL'] else "0"
-                mayo = row['MAYO'] if row['MAYO'] else "0"
-                junio = row['JUNIO'] if row['JUNIO'] else "0"
-                julio = row['JULIO'] if row['JULIO'] else "0"
-                agosto = row['AGOSTO'] if row['AGOSTO'] else "0"
-                septiembre = row['SEPTIEMBRE'] if row['SEPTIEMBRE'] else "0"
-                octubre = row['OCTUBRE'] if row['OCTUBRE'] else "0"
-                noviembre = row['NOVIEMBRE'] if  row['NOVIEMBRE'] else "0"
-                diciembre = row['DICIEMBRE'] if row['DICIEMBRE'] else "0"
+                enero = row['ENERO'] 
+                febrero = row['FEBRERO']
+                marzo = row['MARZO']
+                abril = row['ABRIL']
+                mayo = row['MAYO'] 
+                junio = row['JUNIO'] 
+                julio = row['JULIO'] 
+                agosto = row['AGOSTO'] 
+                septiembre = row['SEPTIEMBRE']
+                octubre = row['OCTUBRE'] 
+                noviembre = row['NOVIEMBRE']
+                diciembre = row['DICIEMBRE'] 
 
                 cursor.execute(
                     """ INSERT INTO cronograma (id_usuario, equipo, enero, febrero, marzo, abril, mayo, junio, julio, agosto, septiembre, octubre, noviembre, diciembre)
