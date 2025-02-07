@@ -18,3 +18,7 @@ async def getdaysbyuser(crono_user: cronouser):
     rpta = nuevo_cronograma.getdaysbyuser(crono_user)
     return rpta
 
+@router.post("/cargue_masivo_cronograma")
+async def cargue_masivo_crono(file: UploadFile = File(...),id_usuario: int = Form(...)):
+    rpta = nuevo_cronograma.cargue_masivo_crono(file,id_usuario)  # Esto está bien
+    return rpta
