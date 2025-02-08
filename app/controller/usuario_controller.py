@@ -9,7 +9,7 @@ class UserController:
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM usuario WHERE correo= %s  || nic=%s", (user.correo, user.nic,))
+            cursor.execute("SELECT * FROM usuario WHERE correo= %s || usuario_l=%s || nic=%s", (user.correo, user.usuario_l, user.nic,))
             result = cursor.fetchall()
 
             if result:
@@ -18,9 +18,9 @@ class UserController:
               
                 return jsonable_encoder(content)
             else:   
-                cursor.execute("""INSERT INTO usuario (id_rol, cliente, correo, contraseña, persona_acargo, telefono, ciudad, direccion, nic, estado) 
-                               VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                               """, (user.id_rol, user.cliente, user.correo, user.password, user.jefe_de_uso, user.telefono, user.ciudad, user.direccion, user.nic, user.estado,))
+                cursor.execute("""INSERT INTO usuario (id_rol, cliente, correo, usuario_l,contraseña, persona_acargo, telefono, ciudad, direccion, nic, estado,) 
+                               VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                               """, (user.id_rol, user.cliente, user.correo, user.usuario_l,user.password, user.jefe_de_uso, user.telefono, user.ciudad, user.direccion, user.nic, user.estado,))
                 conn.commit()
                 conn.close()
                 return {"resultado": "Usuario registrado"}
@@ -35,7 +35,7 @@ class UserController:
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM usuario WHERE correo = %s AND contraseña = %s",(user.correo, user.password,))
+            cursor.execute("SELECT * FROM usuario WHERE (correo = %s || usuario_l=%s)  AND contraseña = %s",(user.correo, user.correo, user.password,))
             result = cursor.fetchall()
             payload = []
             content = {} 
@@ -43,10 +43,11 @@ class UserController:
                 content={
                     'cliente':data[2],
                     'correo':data[3],
-                    'contraseña':data[4],
+                    'usuario':data[4],
+                    'contraseña':data[5],
                     'id':data[0],
                     'id_rol':data[1],
-                    'persona_acargo':data[5],
+                    'persona_acargo':data[6],
 
 
                 }
@@ -79,13 +80,14 @@ class UserController:
                         "id":rv[0],
                         "cliente":rv[2],
                         "correo":rv[3],
-                        "contraseña":rv[4],
-                        "persona_acargo":rv[5],
-                        "telefono":rv[6],
-                        "ciudad":rv[7],
-                        "direccion":rv[8],
-                        "nic":rv[9],
-                        "estado":rv[10]
+                        "usuario":rv[4],
+                        "contraseña":rv[5],
+                        "persona_acargo":rv[6],
+                        "telefono":rv[7],
+                        "ciudad":rv[8],
+                        "direccion":rv[9],
+                        "nic":rv[10],
+                        "estado":rv[11]
                     }
                     payload.append(content)
             content = {}#
@@ -144,13 +146,14 @@ class UserController:
                         "id":rv[0],
                         "cliente":rv[2],
                         "correo":rv[3],
-                        "contraseña":rv[4],
-                        "persona_acargo":rv[5],
-                        "telefono":rv[6],
-                        "ciudad":rv[7],
-                        "direccion":rv[8],
-                        "nic":rv[9],
-                        "estado":rv[10]
+                        "usuario":rv[4],
+                        "contraseña":rv[5],
+                        "persona_acargo":rv[6],
+                        "telefono":rv[7],
+                        "ciudad":rv[8],
+                        "direccion":rv[9],
+                        "nic":rv[10],
+                        "estado":rv[11]
                     }
             payload.append(content)
             content = {}#
@@ -173,6 +176,7 @@ class UserController:
                 set 
                 cliente=%s,
                 correo=%s,
+                usuario_l=%s,
                 contraseña=%s,
                 persona_acargo=%s,
                 telefono=%s,
@@ -181,7 +185,7 @@ class UserController:
                 nic=%s,
                 estado=%s
                 WHERE id=%s
-                """,(user.cliente, user.correo, user.password, user.jefe_de_uso, user.telefono, user.ciudad, user.direccion, user.nic, user.estado, user.id,))
+                """,(user.cliente, user.correo, user.usuario_l,user.password, user.jefe_de_uso, user.telefono, user.ciudad, user.direccion, user.nic, user.estado, user.id,))
             conn.commit()
   
             return {"resultado": "Usuario actualizado correctamente"} 
@@ -208,13 +212,14 @@ class UserController:
                         "id":rv[0],
                         "cliente":rv[2],
                         "correo":rv[3],
-                        "contraseña":rv[4],
-                        "persona_acargo":rv[5],
-                        "telefono":rv[6],
-                        "ciudad":rv[7],
-                        "direccion":rv[8],
-                        "nic":rv[9],
-                        "estado":rv[10]
+                        "usuario":rv[4],
+                        "contraseña":rv[5],
+                        "persona_acargo":rv[6],
+                        "telefono":rv[7],
+                        "ciudad":rv[8],
+                        "direccion":rv[9],
+                        "nic":rv[10],
+                        "estado":rv[11]
                     }
                     payload.append(content)
             content = {}#
@@ -244,13 +249,14 @@ class UserController:
                         "id":rv[0],
                         "cliente":rv[2],
                         "correo":rv[3],
-                        "contraseña":rv[4],
-                        "persona_acargo":rv[5],
-                        "telefono":rv[6],
-                        "ciudad":rv[7],
-                        "direccion":rv[8],
-                        "nic":rv[9],
-                        "estado":rv[10]
+                        "usuario":rv[4],
+                        "contraseña":rv[5],
+                        "persona_acargo":rv[6],
+                        "telefono":rv[7],
+                        "ciudad":rv[8],
+                        "direccion":rv[9],
+                        "nic":rv[10],
+                        "estado":rv[11]
                     }
                     payload.append(content)
             content = {}#
@@ -268,7 +274,7 @@ class UserController:
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM usuario WHERE correo= %s  || persona_acargo=%s", (user.correo, user.jefe_de_uso,))
+            cursor.execute("SELECT * FROM usuario WHERE (correo= %s || usuario_l=%s)  || persona_acargo=%s", (user.correo,  user.usuario_l, user.jefe_de_uso,))
             result = cursor.fetchall()
 
             if result:
@@ -277,9 +283,9 @@ class UserController:
             
                 return jsonable_encoder(content)
             else:   
-                cursor.execute("""INSERT INTO usuario (id_rol, cliente, correo, contraseña, persona_acargo, telefono, ciudad, direccion, nic, estado) 
-                            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                            """, (user.id_rol, user.cliente, user.correo, user.password, user.jefe_de_uso, user.telefono, user.ciudad, user.direccion, user.nic, user.estado,))
+                cursor.execute("""INSERT INTO usuario (id_rol, cliente, correo, usuario_l, contraseña, persona_acargo, telefono, ciudad, direccion, nic, estado) 
+                            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                            """, (user.id_rol, user.cliente, user.usuario_l,user.correo, user.password, user.jefe_de_uso, user.telefono, user.ciudad, user.direccion, user.nic, user.estado,))
                 conn.commit()
                 conn.close()
                 return {"resultado": "Usuario registrado"}

@@ -6,6 +6,7 @@ class User(BaseModel):
     id_rol: int
     cliente: str
     correo: str
+    usuario_l:str
     password: str 
     jefe_de_uso: str 
     telefono: Optional[str] = None
@@ -25,6 +26,7 @@ class Actualizar(BaseModel):
     id: int= None
     cliente: str
     correo: str
+    usuario_l:str
     password: str 
     jefe_de_uso: str 
     telefono: str = None
