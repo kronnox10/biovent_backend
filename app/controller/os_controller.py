@@ -34,22 +34,44 @@ class os_controller:
             conn.close()
     
 
-    def update_os(self,os:OSUpdate):
+    def update_os(self, os:OSUpdate, pos:pendiente_os ):        
+        
         try:
-            conn = get_db_connection()
+            conn = get_db_connection() 
             cursor = conn.cursor()
-            cursor.execute("""UPDATE orden_servicio
-                set 
-                estado=0
-                WHERE id=%s""",(os.id,))
-            conn.commit()
-  
+            cursor.execute("SELECT id_os FROM maquinas_pendientes WHERE id_os=%s", (os.id,))
+            result = cursor.fetchall()
+
+            if result:
+                cursor.execute("""UPDATE maquinas_pendientes
+                           set descripcion_t=%s, repuestos=%s, estado=%s
+                            WHERE os.id=%s
+                            """,(pos.descripcion, pos.repuestos, pos.estado,os.id,))
+
+                cursor.execute("""UPDATE orden_servicio as os
+                INNER JOIN maquinas as machine ON os.id_maquina = machine.id
+                set  os.estado=%s, machine.estado=%s
+                WHERE os.id=%s""",(os.estado,os.estado_machine,os.id,))
+                conn.commit()
+            else:   
+                cursor.execute("""INSERT INTO maquinas_pendientes (id_os, id_propietario, id_maquina, descripcion_t, repuestos, estado) 
+                           VALUES(%s,%s,%s,%s,%s,%s)                       
+                        """,(pos.id_os, pos.id_maquina, pos.id_propietario, pos.descripcion, pos.repuestos, pos.estado,))
+
+                cursor.execute("""UPDATE orden_servicio as os
+                INNER JOIN maquinas as machine ON os.id_maquina = machine.id
+                set  os.estado=%s, machine.estado=%s
+                WHERE os.id=%s""",(os.estado,os.estado_machine,os.id,))
+                conn.commit()
+            
             return {"resultado": "Os realizado satisfactoriamente"} 
                 
         except mysql.connector.Error as err:
             conn.rollback()
+            return {"error": f"Error al actualizar la OS: {err}"}
         finally:
             conn.close()    
+
 
     def get_osi(self, os_id: Find_Os):
         try:
@@ -96,8 +118,9 @@ class os_controller:
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute("""SELECT orden_servicio.id, propietario.cliente AS propietario_cliente, maquinas.equipo AS nombre_maquina,
-                            orden_servicio.descripcion, tecnico.persona_acargo AS tecnico_nombre, orden_servicio.estado
-                        FROM orden_servicio
+                            orden_servicio.descripcion, tecnico.persona_acargo AS tecnico_nombre, orden_servicio.estado,
+                            orden_servicio.id_maquina AS id_maquina, orden_servicio.id_propietario AS id_propietario
+                           FROM orden_servicio
                     INNER JOIN usuario AS propietario ON orden_servicio.id_propietario = propietario.id
                     INNER JOIN maquinas ON orden_servicio.id_maquina = maquinas.id
                     LEFT JOIN usuario AS tecnico ON orden_servicio.id_tecnico = tecnico.id
@@ -117,6 +140,8 @@ class os_controller:
                         "descripcion":rv[3],
                         "tecnico":rv[4],
                         "estado":rv[5],
+                        "maquina":rv[6],
+                        "dueño":rv[7],
                     }
                     payload.append(content)
             content = {}#

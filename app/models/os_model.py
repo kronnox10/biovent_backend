@@ -19,4 +19,17 @@ class OST(BaseModel):
 
 class OSUpdate(BaseModel):
     id: int
+    id_maquina: int
+    estado_machine: bool
+    estado: bool
 
+
+class pendiente_os (BaseModel):
+    id: int
+    id_os: int
+    id_maquina: int
+    id_propietario: int
+    descripcion: str
+    repuestos: str
+    estado: str
+    
