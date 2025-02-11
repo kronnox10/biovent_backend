@@ -45,7 +45,7 @@ class os_controller:
             if result:
                 cursor.execute("""UPDATE maquinas_pendientes
                            set descripcion_t=%s, repuestos=%s, estado=%s
-                            WHERE os.id=%s
+                            WHERE id_os=%s
                             """,(pos.descripcion, pos.repuestos, pos.estado_p,os.id,))
 
                 cursor.execute("""UPDATE orden_servicio as os
