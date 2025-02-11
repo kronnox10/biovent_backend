@@ -25,7 +25,7 @@ class OSUpdate(BaseModel):
 
 
 class pendiente_os (BaseModel):
-    id: int
+    id: int=None
     id_os: int
     id_maquina: int
     id_propietario: int
