@@ -46,7 +46,7 @@ class os_controller:
                 cursor.execute("""UPDATE maquinas_pendientes
                            set descripcion_t=%s, repuestos=%s, estado=%s
                             WHERE os.id=%s
-                            """,(pos.descripcion, pos.repuestos, pos.estado,os.id,))
+                            """,(pos.descripcion, pos.repuestos, pos.estado_p,os.id,))
 
                 cursor.execute("""UPDATE orden_servicio as os
                 INNER JOIN maquinas as machine ON os.id_maquina = machine.id
@@ -56,7 +56,7 @@ class os_controller:
             else:   
                 cursor.execute("""INSERT INTO maquinas_pendientes (id_os, id_propietario, id_maquina, descripcion_t, repuestos, estado) 
                            VALUES(%s,%s,%s,%s,%s,%s)                       
-                        """,(pos.id_os, pos.id_maquina, pos.id_propietario, pos.descripcion, pos.repuestos, pos.estado,))
+                        """,(pos.id_os, pos.id_maquina_p, pos.id_propietario, pos.descripcion, pos.repuestos, pos.estado_p,))
 
                 cursor.execute("""UPDATE orden_servicio as os
                 INNER JOIN maquinas as machine ON os.id_maquina = machine.id
