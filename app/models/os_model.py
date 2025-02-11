@@ -17,12 +17,13 @@ class OST(BaseModel):
     id:int=None
     id_tecnico: str = None
 
+
+
 class OSUpdate(BaseModel):
     id: int
     id_maquina: int
     estado_machine: bool
     estado: bool
-
 
 class pendiente_os (BaseModel):
     id: int=None
@@ -33,3 +34,11 @@ class pendiente_os (BaseModel):
     repuestos: str
     estado_p: str
     
+
+class Osp_pendientes(BaseModel):
+    osupdate: OSUpdate
+    pendiente:pendiente_os
+
+
+
+

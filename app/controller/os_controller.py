@@ -34,34 +34,34 @@ class os_controller:
             conn.close()
     
 
-    def update_os(self, os:OSUpdate, pos:pendiente_os ):        
+    def update_os(self, osp_pendientes:Osp_pendientes):        
         
         try:
             conn = get_db_connection() 
             cursor = conn.cursor()
-            cursor.execute("SELECT id_os FROM maquinas_pendientes WHERE id_os=%s", (os.id,))
+            cursor.execute("SELECT id_os FROM maquinas_pendientes WHERE id_os=%s", (osp_pendientes.osupdate.id,))
             result = cursor.fetchall()
 
             if result:
                 cursor.execute("""UPDATE maquinas_pendientes
                            set descripcion_t=%s, repuestos=%s, estado=%s
                             WHERE id_os=%s
-                            """,(pos.descripcion, pos.repuestos, pos.estado_p,os.id,))
+                            """,(osp_pendientes.pendiente.descripcion, osp_pendientes.pendiente.repuestos, osp_pendientes.pendiente.estado_p, osp_pendientes.osupdate.id,))
 
                 cursor.execute("""UPDATE orden_servicio as os
                 INNER JOIN maquinas as machine ON os.id_maquina = machine.id
                 set  os.estado=%s, machine.estado=%s
-                WHERE os.id=%s""",(os.estado,os.estado_machine,os.id,))
+                WHERE os.id=%s""",(osp_pendientes.osupdate.estado, osp_pendientes.osupdate.estado_machine, osp_pendientes.osupdate.id,))
                 conn.commit()
             else:   
                 cursor.execute("""INSERT INTO maquinas_pendientes (id_os, id_propietario, id_maquina, descripcion_t, repuestos, estado) 
                            VALUES(%s,%s,%s,%s,%s,%s)                       
-                        """,(pos.id_os, pos.id_maquina_p, pos.id_propietario, pos.descripcion, pos.repuestos, pos.estado_p,))
+                        """,(osp_pendientes.pendiente.id_os, osp_pendientes.pendiente.id_maquina_p, osp_pendientes.pendiente.id_propietario, osp_pendientes.pendiente.descripcion, osp_pendientes.pendiente.repuestos, osp_pendientes.pendiente.estado_p,))
 
                 cursor.execute("""UPDATE orden_servicio as os
                 INNER JOIN maquinas as machine ON os.id_maquina = machine.id
                 set  os.estado=%s, machine.estado=%s
-                WHERE os.id=%s""",(os.estado,os.estado_machine,os.id,))
+                WHERE os.id=%s""",(osp_pendientes.osupdate.estado, osp_pendientes.osupdate.estado_machine, osp_pendientes.osupdate.id,))
                 conn.commit()
             
             return {"resultado": "Os realizado satisfactoriamente"} 
