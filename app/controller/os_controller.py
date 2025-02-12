@@ -196,7 +196,6 @@ class os_controller:
             conn.close()
         
 
-
     def get_os(self, os_id: Find_Os):
         try:
             conn = get_db_connection()
@@ -331,3 +330,87 @@ class os_controller:
         finally:
             conn.close()    
         
+
+
+
+    def get_pendientes(self, os_id: Find_Os):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("""SELECT orden_servicio.id, propietario.cliente AS propietario_cliente, 
+                           maquinas.equipo AS nombre_maquina, orden_servicio.descripcion, 
+                           tecnico.persona_acargo AS tecnico_nombre, orden_servicio.estado 
+                           FROM orden_servicio 
+                           INNER JOIN maquinas_pendientes as mp ON mp.id_os=orden_servicio.id 
+                           INNER JOIN usuario AS propietario ON orden_servicio.id_propietario = propietario.id 
+                           INNER JOIN maquinas ON orden_servicio.id_maquina = maquinas.id 
+                           LEFT JOIN usuario AS tecnico ON orden_servicio.id_tecnico = tecnico.id 
+                           WHERE orden_servicio.id_tecnico = %s AND mp.id_os=orden_servicio.id""", (os_id.id_usuario,))
+            result = cursor.fetchall()# 
+            payload = []
+            content = {} 
+            if result:
+                
+                content={}
+                payload=[]
+                for rv in result:
+                    content={
+                        "id":rv[0],
+                        "usuario_cliente":rv[1],
+                        "nombre_maquina":rv[2],
+                        "descripcion":rv[3],
+                        "tecnico":rv[4],
+                        "estado":rv[5],
+                    }
+                    payload.append(content)
+            content = {}#
+            json_data = jsonable_encoder(payload)        
+            if result:
+               return {"resultado": json_data}
+            else:
+                raise HTTPException(status_code=404, detail="maquina not found")  
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+
+
+    def pendientes_pdf(self, Oss: Get_os):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("""SELECT mp.descripcion_t, mp.repuestos, mp.estado,  propietario.cliente, maquinas.equipo,
+                            tecnico.persona_acargo
+                            FROM maquinas_pendientes AS mp
+                            INNER JOIN orden_servicio AS os on mp.id_os=os.id
+                            INNER JOIN usuario AS propietario ON os.id_propietario = propietario.id
+                            INNER JOIN maquinas ON os.id_maquina = maquinas.id
+                            INNER JOIN usuario AS tecnico ON os.id_tecnico = tecnico.id
+                            WHERE os.id = %s AND os.id = mp.id_os;""", (Oss.id,))
+            result = cursor.fetchall()# 
+            payload = []
+            content = {} 
+            if result:
+                
+                content={}
+                payload=[]
+                for rv in result:
+                    content={
+                        "Descripcion":rv[0],
+                        "Repuestos":rv[1],
+                        "Estado de la maquina":rv[2],
+                        "Dueño":rv[3],
+                        "Maquina":rv[4],
+                        "tecnico":rv[5],
+                    }
+                    payload.append(content)
+            content = {}#
+            json_data = jsonable_encoder(payload)        
+            if result:
+               return {"resultado": json_data}
+            else:
+                raise HTTPException(status_code=404, detail="maquina not found")  
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()

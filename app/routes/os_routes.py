@@ -51,3 +51,14 @@ async def asignar_tecnico_os(os:OST):
 async def update_os(osp_pendientes: Osp_pendientes):
     rpta= nueva_os.update_os(osp_pendientes)
     return rpta
+
+
+@router.post("/get_pendientes")
+async def get_pendientes(os_id: Find_Os):
+    rpta= nueva_os.get_pendientes(os_id)
+    return rpta
+
+@router.post("/pendientes_pdf")
+async def pendientes_pdf(Oss: Get_os):
+    rpta= nueva_os.pendientes_pdf(Oss)
+    return rpta

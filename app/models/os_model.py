@@ -9,15 +9,16 @@ class OS (BaseModel):
     tecnico: Optional[int] = None
     estado: bool
 
-
 class Find_Os(BaseModel):
     id_usuario: int
+
+
+class Get_os(BaseModel):
+    id: int
 
 class OST(BaseModel):
     id:int=None
     id_tecnico: str = None
-
-
 
 class OSUpdate(BaseModel):
     id: int
@@ -38,7 +39,4 @@ class pendiente_os (BaseModel):
 class Osp_pendientes(BaseModel):
     osupdate: OSUpdate
     pendiente:pendiente_os
-
-
-
 
