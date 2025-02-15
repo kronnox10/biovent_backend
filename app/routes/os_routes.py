@@ -62,3 +62,9 @@ async def get_pendientes(os_id: Find_Os):
 async def pendientes_pdf(Oss: Get_os):
     rpta= nueva_os.pendientes_pdf(Oss)
     return rpta
+
+
+@router.post("/historial_os_machine")
+async def historial_os_machine(machine_id: Get_os):
+    rpta= nueva_os.historial_os_machine(machine_id)
+    return rpta

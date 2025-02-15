@@ -340,7 +340,7 @@ class os_controller:
             cursor = conn.cursor()
             cursor.execute("""SELECT orden_servicio.id, propietario.cliente AS propietario_cliente, 
                            maquinas.equipo AS nombre_maquina, orden_servicio.descripcion, 
-                           tecnico.persona_acargo AS tecnico_nombre, orden_servicio.estado 
+                           tecnico.persona_acargo AS tecnico_nombre, orden_servicio.estado,maquinas.serie
                            FROM orden_servicio 
                            INNER JOIN maquinas_pendientes as mp ON mp.id_os=orden_servicio.id 
                            INNER JOIN usuario AS propietario ON orden_servicio.id_propietario = propietario.id 
@@ -362,6 +362,7 @@ class os_controller:
                         "descripcion":rv[3],
                         "tecnico":rv[4],
                         "estado":rv[5],
+                        "serial":rv[6],
                     }
                     payload.append(content)
             content = {}#
@@ -418,16 +419,17 @@ class os_controller:
 
 
         
-    def historial_os_machine(self):
+    def historial_os_machine(self, machine_id: Get_os):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("""SELECT orden_servicio.id, propietario.cliente AS propietario_cliente, maquinas.equipo AS nombre_maquina,
-                            orden_servicio.descripcion, tecnico.persona_acargo AS tecnico_nombre, orden_servicio.estado
-                        FROM orden_servicio
-                    INNER JOIN usuario AS propietario ON orden_servicio.id_propietario = propietario.id
-                    INNER JOIN maquinas ON orden_servicio.id_maquina = maquinas.id
-                    LEFT JOIN usuario AS tecnico ON orden_servicio.id_tecnico = tecnico.id""")
+            cursor.execute("""SELECT m.equipo, m.serie, os.descripcion, us.persona_acargo, mp.estado, mp.create 
+                                FROM maquinas AS m 
+                                INNER JOIN orden_servicio AS os ON m.id=os.id_maquina 
+                                LEFT JOIN usuario AS u ON os.id_propietario=u.cliente 
+                                LEFT JOIN usuario AS us ON os.id_tecnico=us.id 
+                                LEFT JOIN maquinas_pendientes AS mp ON os.id=mp.id_os 
+                                WHERE m.id=%s;"""),(machine_id.id)
             result = cursor.fetchall()
             payload = []
             content = {} 
@@ -437,12 +439,12 @@ class os_controller:
                 payload=[]
                 for rv in result:
                     content={
-                        "id":rv[0],
-                        "usuario_cliente":rv[1],
-                        "nombre_maquina":rv[2],
-                        "descripcion":rv[3],
-                        "tecnico":rv[4],
-                        "estado":rv[5],
+                        "Equipo":rv[0],
+                        "Serie":rv[1],
+                        "Descripcion":rv[2],
+                        "Tecnico":rv[3],
+                        "Estado":rv[4],
+                        "Fecha":rv[5],
                     }
                     payload.append(content)
             content = {}#
@@ -450,7 +452,7 @@ class os_controller:
             if result:
                return {"resultado": json_data}
             else:
-                raise HTTPException(status_code=404, detail="maquina not found")  
+                raise HTTPException(status_code=404, detail="Historico not found")  
         except mysql.connector.Error as err:
             conn.rollback()
         finally:
