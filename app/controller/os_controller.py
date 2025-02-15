@@ -12,7 +12,7 @@ class os_controller:
         try:
             conn = get_db_connection() 
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM orden_servicio WHERE id_propietario=%s AND id_maquina=%s", (os.id_propietario,os.id_maquina,))
+            cursor.execute("SELECT * FROM orden_servicio WHERE id_propietario=%s AND id_maquina=%s AND estado=1", (os.id_propietario,os.id_maquina,))
             result = cursor.fetchall()
 
             if result:
@@ -331,8 +331,6 @@ class os_controller:
             conn.close()    
         
 
-
-
     def get_pendientes(self, os_id: Find_Os):
         try:
             conn = get_db_connection()
@@ -402,6 +400,46 @@ class os_controller:
                         "Dueño":rv[3],
                         "Maquina":rv[4],
                         "tecnico":rv[5],
+                    }
+                    payload.append(content)
+            content = {}#
+            json_data = jsonable_encoder(payload)        
+            if result:
+               return {"resultado": json_data}
+            else:
+                raise HTTPException(status_code=404, detail="maquina not found")  
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+
+
+        
+    def historial_os_machine(self):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("""SELECT orden_servicio.id, propietario.cliente AS propietario_cliente, maquinas.equipo AS nombre_maquina,
+                            orden_servicio.descripcion, tecnico.persona_acargo AS tecnico_nombre, orden_servicio.estado
+                        FROM orden_servicio
+                    INNER JOIN usuario AS propietario ON orden_servicio.id_propietario = propietario.id
+                    INNER JOIN maquinas ON orden_servicio.id_maquina = maquinas.id
+                    LEFT JOIN usuario AS tecnico ON orden_servicio.id_tecnico = tecnico.id""")
+            result = cursor.fetchall()
+            payload = []
+            content = {} 
+            if result:
+                
+                content={}
+                payload=[]
+                for rv in result:
+                    content={
+                        "id":rv[0],
+                        "usuario_cliente":rv[1],
+                        "nombre_maquina":rv[2],
+                        "descripcion":rv[3],
+                        "tecnico":rv[4],
+                        "estado":rv[5],
                     }
                     payload.append(content)
             content = {}#
