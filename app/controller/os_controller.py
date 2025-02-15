@@ -43,6 +43,7 @@ class os_controller:
             result = cursor.fetchall()
 
             if result:
+                print ("entra al condicional if ")
                 cursor.execute("""INSERT INTO maquinas_pendientes (id_os, id_propietario, id_maquina, descripcion_t, repuestos, estado) 
                            VALUES(%s,%s,%s,%s,%s,%s)                       
                         """,(osp_pendientes.pendiente.id_os, osp_pendientes.pendiente.id_maquina_p, osp_pendientes.pendiente.id_propietario, osp_pendientes.pendiente.descripcion, osp_pendientes.pendiente.repuestos, osp_pendientes.pendiente.estado_p,))
@@ -54,6 +55,7 @@ class os_controller:
                 conn.commit()
 
             else:   
+                print ("entra al condicional else")
                 
                 cursor.execute("""INSERT INTO maquinas_pendientes (id_os, id_propietario, id_maquina, descripcion_t, repuestos, estado) 
                            VALUES(%s,%s,%s,%s,%s,%s)                       
