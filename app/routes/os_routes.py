@@ -65,6 +65,6 @@ async def pendientes_pdf(Oss: Get_os):
 
 
 @router.post("/historial_os_machine")
-async def historial_os_machine(machine_id: Get_os):
-    rpta= nueva_os.historial_os_machine(machine_id)
+async def historial_os_machine(HOS: Find_machine):
+    rpta= nueva_os.historial_os_machine(HOS)
     return rpta

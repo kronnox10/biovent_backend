@@ -12,6 +12,8 @@ class OS (BaseModel):
 class Find_Os(BaseModel):
     id_usuario: int
 
+class Find_machine(BaseModel):
+    id_machine:int
 
 class Get_os(BaseModel):
     id: int
