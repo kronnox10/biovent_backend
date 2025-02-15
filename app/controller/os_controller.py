@@ -429,7 +429,7 @@ class os_controller:
                                 LEFT JOIN usuario AS u ON os.id_propietario=u.cliente 
                                 LEFT JOIN usuario AS us ON os.id_tecnico=us.id 
                                 LEFT JOIN maquinas_pendientes AS mp ON os.id=mp.id_os 
-                                WHERE m.id=%s;"""),(machine_id.id)
+                                WHERE m.id=%s;""",(machine_id.id))
             result = cursor.fetchall()
             payload = []
             content = {} 
