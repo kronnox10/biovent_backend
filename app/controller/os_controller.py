@@ -163,8 +163,8 @@ class os_controller:
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("""SELECT orden_servicio.id, propietario.cliente AS propietario_cliente, maquinas.equipo AS nombre_maquina,
-                            orden_servicio.descripcion, tecnico.persona_acargo AS tecnico_nombre, orden_servicio.estado
+            cursor.execute("""SELECT orden_servicio.id, propietario.cliente AS propietario_cliente, maquinas.equipo AS nombre_maquina
+                           ,maquinas.serie,orden_servicio.descripcion, tecnico.persona_acargo AS tecnico_nombre, orden_servicio.estado
                         FROM orden_servicio
                     INNER JOIN usuario AS propietario ON orden_servicio.id_propietario = propietario.id
                     INNER JOIN maquinas ON orden_servicio.id_maquina = maquinas.id
@@ -182,9 +182,10 @@ class os_controller:
                         "id":rv[0],
                         "usuario_cliente":rv[1],
                         "nombre_maquina":rv[2],
-                        "descripcion":rv[3],
-                        "tecnico":rv[4],
-                        "estado":rv[5],
+                        "serial":rv[3],
+                        "descripcion":rv[4],
+                        "tecnico":rv[5],
+                        "estado":rv[6],
                     }
                     payload.append(content)
             content = {}#
