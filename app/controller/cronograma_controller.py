@@ -62,6 +62,115 @@ class Cronogramacontroller:
             conn.close()
 
 
+    def gealls(self):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("""SELECT cr.id_usuario,
+                                u.cliente,      
+                                MAX(cr.enero) AS enero,
+                                MAX(cr.febrero) AS febrero, 
+                                MAX(cr.marzo) AS marzo, 
+                                MAX(cr.abril) AS abril, 
+                                MAX(cr.mayo) AS mayo, 
+                                MAX(cr.junio) AS junio, 
+                                MAX(cr.julio) AS julio, 
+                                MAX(cr.agosto) AS agosto, 
+                                MAX(cr.septiembre) AS septiembre, 
+                                MAX(cr.octubre) AS octubre, 
+                                MAX(cr.noviembre) AS noviembre, 
+                                MAX(cr.diciembre) AS diciembre 
+                            FROM cronograma AS cr 
+                            LEFT JOIN usuario AS u ON cr.id_usuario = u.id 
+                            GROUP BY u.id;""")
+            result = cursor.fetchall()
+            payload = []
+            content = {} 
+            if result:
+                for rv in result:
+                    content = {
+                        "id_usuario":rv[0],
+                        "Cliente":rv[1],
+                        "enero":rv[2],
+                        "febrero":rv[3],
+                        "marzo":rv[4],
+                        "abril":rv[5],
+                        "mayo":rv[6],
+                        "junio":rv[7],
+                        "julio":rv[8],
+                        "agosto":rv[9],
+                        "septiembre":rv[10],
+                        "octubre":rv[11],
+                        "noviembre":rv[12],
+                        "diciembre":rv[13]
+                    }
+                    payload.append(content)
+                json_data = jsonable_encoder(payload)  
+            if payload:
+               return {"resultado": json_data}
+            else:
+                raise HTTPException(status_code=404, detail="Cronograma not found")  
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+
+    
+    def gealls_byid(self, crono_user: cronouser):
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("""SELECT cr.id_usuario,
+                                u.cliente,      
+                                MAX(cr.enero) AS enero,
+                                MAX(cr.febrero) AS febrero, 
+                                MAX(cr.marzo) AS marzo, 
+                                MAX(cr.abril) AS abril, 
+                                MAX(cr.mayo) AS mayo, 
+                                MAX(cr.junio) AS junio, 
+                                MAX(cr.julio) AS julio, 
+                                MAX(cr.agosto) AS agosto, 
+                                MAX(cr.septiembre) AS septiembre, 
+                                MAX(cr.octubre) AS octubre, 
+                                MAX(cr.noviembre) AS noviembre, 
+                                MAX(cr.diciembre) AS diciembre 
+                            FROM cronograma AS cr 
+                            LEFT JOIN usuario AS u ON cr.id_usuario = u.id 
+                            WHERE cr.id_usuario=%s
+                            GROUP BY u.id;""",(crono_user.id_usuario,))
+            result = cursor.fetchall()
+            payload = []
+            content = {} 
+            if result:
+                for rv in result:
+                    content = {
+                        "id_usuario":rv[0],
+                        "Cliente":rv[1],
+                        "enero":rv[2],
+                        "febrero":rv[3],
+                        "marzo":rv[4],
+                        "abril":rv[5],
+                        "mayo":rv[6],
+                        "junio":rv[7],
+                        "julio":rv[8],
+                        "agosto":rv[9],
+                        "septiembre":rv[10],
+                        "octubre":rv[11],
+                        "noviembre":rv[12],
+                        "diciembre":rv[13]
+                    }
+                    payload.append(content)
+                json_data = jsonable_encoder(payload)        
+            if payload:
+               return {"resultado": json_data}
+            else:
+                raise HTTPException(status_code=404, detail="Cronograma not found")  
+        except mysql.connector.Error as err:
+            conn.rollback()
+        finally:
+            conn.close()
+
+
     def cargue_masivo_crono(self, file: UploadFile, id_usuario: int):
         conn = None
         try:
